@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormControl, FormGroup, ValidationErrors } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 
 @Injectable({providedIn: 'root'})
 export class ValidatorsService {
@@ -24,6 +24,29 @@ export class ValidatorsService {
     return form.controls[field].errors && form.controls[field].touched;
   }
 
+
+  isFieldOneEqualFieldTwo(field1:string, field2:string){
+
+    //esta función haría la validación asíncrona si se requiere
+    return (formGroup: AbstractControl):ValidationErrors | null => {
+
+      const fieldValue1 = formGroup.get(field1)?.value;
+      const fieldValue2 = formGroup.get(field2)?.value;
+
+      if( fieldValue1 !== fieldValue2 ){
+        //error en el input2
+        formGroup.get(field2)?.setErrors({notEqual:true})
+        //error a nivel formulario
+        return {
+          notEqual:true
+        }
+      }
+
+      formGroup.get(field2)?.setErrors(null);
+
+      return null;
+    }
+  }
 
 
 }
